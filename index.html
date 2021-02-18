@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Goaroutes Explorer</title>
+    <link rel="stylesheet" href="styles.css">
+    <script type="text/javascript" src="https://d3js.org/d3.v6.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/topojson@3.0.2/dist/topojson.min.js"></script>
+</head>
+
+<body>
+    <svg width="210" height="400" style="fill: black;"></svg>
+    <script>
+        const svg = d3.select('svg');
+
+        const projection = d3.geoMercator();
+        const pathgen = d3.geoPath().projection(projection);
+
+        d3.json('map.topojson')
+            .then(data => {
+                const collection = topojson.feature(data, data.objects.collection);
+
+                const paths = svg.selectAll('path')
+                    .data(collection.features);
+
+                paths.enter().append('path')
+                    .attr("class", "collection")
+                    .attr('d', pathgen);
+
+            }
+            );
+    </script>
+</body>
+
+</html>
